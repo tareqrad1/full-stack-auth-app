@@ -47,7 +47,6 @@ export const verifyEmail = async(req, res) => {
         if(!user) {
             return res.status(404).json({ error: 'Invalid verification code' });
         }
-        user.password = undefined;
         user.isVerified = true;
         user.verificationToken = undefined;
         user.verificationTokenExpireAt = undefined;
