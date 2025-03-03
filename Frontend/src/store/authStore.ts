@@ -1,10 +1,14 @@
 import axios, { isAxiosError } from 'axios';
 import { create } from 'zustand';
 type UserTypes = {
-    name: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
+    user: {
+        name: string;
+        email: string;
+        password: string;
+        isVerified: boolean;
+        lastLogin: Date;
+        createdAt: Date | number | string;
+    }
 }
 interface AuthStoreTypes {
     user: null | UserTypes;
@@ -14,6 +18,9 @@ interface AuthStoreTypes {
     isCheckingAuth: boolean;
     signup: (name: string, email: string, password: string, confirmPassword: string) => void;
     verifyEmail: (code: string) => void;
+    signin: (email: string, password: string) => void;
+    signout: () => void;
+    checkAuth: () => void;
 }
 const API_URL = `http://localhost:3000/api/auth`;
 axios.defaults.withCredentials = true;
@@ -24,7 +31,6 @@ export const useAuthStore = create<AuthStoreTypes>((set) => ({
     isLoading: false,
     error: null,
     isCheckingAuth: true,
-    // start the function
     signup: async(name, email, password, confirmPassword) => {
         set({ isLoading: true });
         try {
@@ -34,7 +40,7 @@ export const useAuthStore = create<AuthStoreTypes>((set) => ({
                 password,
                 confirmPassword,
             });
-            set({ isLoading: false, user: response.data.user, error: null, isAuthenticated: true });
+            set({ isLoading: false, user: response.data?.user, error: null, isAuthenticated: true });
         } catch (error: unknown) {
             console.log(error);
             if(isAxiosError(error)){
@@ -57,9 +63,55 @@ export const useAuthStore = create<AuthStoreTypes>((set) => ({
             console.log(error);
             if(isAxiosError(error)){
                 if(error instanceof Error) {
-                    set({ isLoading: false, error: error.response?.data.error,  });
+                    set({ isLoading: false, error: error.response?.data.error  });
                     throw error;
                 }
+            }
+        }
+    },
+    signin: async(email, password) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await axios.post(`${API_URL}/signin`, {
+                email,
+                password
+            }, {withCredentials: true});            
+            set({ isLoading: false, user: response.data?.user, error: null, isAuthenticated: true });
+        } catch (error) {
+            console.log(error);
+            if(isAxiosError(error)){
+                if(error instanceof Error) {
+                    set({ isLoading: false, error: error.response?.data.error  });
+                    throw error;
+                }
+            }
+        }
+    },
+    signout: async() => {
+        set({ isLoading: true, error: null });
+        try {
+            await axios.post(`${API_URL}/signout`);
+            set({ isLoading: false, user: null, error: null, isAuthenticated: false });
+        } catch (error) {
+            console.log(error);
+            if(isAxiosError(error)){
+                if(error instanceof Error) {
+                    set({ isLoading: false, error: error.response?.data.error  });
+                    throw error;
+                }
+            }
+        }
+    },
+    checkAuth: async() => {
+        set({ isLoading: true, isCheckingAuth: true, error: null });
+        try {
+            const response = await axios.get(`${API_URL}/me`);
+            set({ isLoading:false, user: response.data, isAuthenticated: true, isCheckingAuth: false });
+        } catch (error: unknown) {
+            console.log(error);
+            if(error instanceof Error) {
+                set({ isLoading: false, error: null, user: null, isAuthenticated: false });
+                throw error;
             }
         }
     }

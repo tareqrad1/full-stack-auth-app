@@ -21,7 +21,7 @@ const VerifyEmailPage: React.FC = (): React.JSX.Element => {
       }
       setCode(newCode);
 
-      const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
+      const lastFilledIndex = newCode.findLastIndex((digit: string) => digit !== "");
       const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
       inputRefs.current[focusIndex]?.focus();
     } else {
@@ -94,7 +94,7 @@ const VerifyEmailPage: React.FC = (): React.JSX.Element => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            // disabled={isLoading || code.some((digit) => !digit)}
+            disabled={isLoading || code.some((digit) => !digit)}
             className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
           >
             {isLoading ? "Verifying..." : "Verify Email"}

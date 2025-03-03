@@ -62,7 +62,7 @@ export const signin = async(req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if(!user) return res.status(404).json({ error: 'User not found' });
+        if(!user) return res.status(404).json({ error: 'email or password is incorrect' });
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid) return res.status(401).json({ error: 'email or password is incorrect' });
         user.lastLogin = Date.now();
@@ -123,7 +123,7 @@ export const resetPassword = async(req, res) => {
 };
 export const checkAuth = async(req, res) => {
     try {
-        const user = await User.findOne(req.user._id);
+        const user = await User.findOne(req.user._id).select('-password');
         res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ error: 'Something went wronggg' });
