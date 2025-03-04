@@ -12,7 +12,7 @@ interface UserTypes {
 }
 const Signin: React.FC = (): React.JSX.Element => {
 	const Navigate = useNavigate();
-	const { signin, isLoading, error} = useAuthStore();
+	const { signin, isLoading, error } = useAuthStore();
     const [userDetails, setUserDetails] = useState<UserTypes>({
         email: "",
         password: "",
@@ -29,7 +29,7 @@ const Signin: React.FC = (): React.JSX.Element => {
 		e.preventDefault();
 		await signin(userDetails.email, userDetails.password);
 		Navigate('/');
-		toast.success('Logged in successfully');
+        toast.success('Logged in successfully');
 	}
   return (
     <motion.div

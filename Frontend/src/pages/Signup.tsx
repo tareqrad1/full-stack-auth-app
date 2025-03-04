@@ -27,7 +27,6 @@ const Signup: React.FC = (): React.JSX.Element => {
                 [e.target.name]: e.target.value,
             }
         })
-        console.log(userDetails);
     };
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -65,7 +64,7 @@ const Signup: React.FC = (): React.JSX.Element => {
                         value={userDetails.password}
                         name='password'
                         />
-                <Input icon={Mail}
+                <Input icon={Lock}
 						type='password'
 						placeholder='Confirm Password'
                         onChange={handleChange}
@@ -87,7 +86,7 @@ const Signup: React.FC = (): React.JSX.Element => {
             <PasswordStrengthMeter password={userDetails.password} />
         </div>
         <div className='bg-gray-900 bg-opacity-50 mt-7 text-center py-2'>
-            <p className='text-gray-400 flex justify-center items-center flex-row'>already have an account? <Link to='/signin' className='text-green-500 ml-1'>Log in</Link></p>
+            <p className='text-gray-400 flex justify-center items-center flex-row'>already have an account? <Link to='/signin' className='text-green-500 ml-1'>Sign in</Link></p>
         </div>
     </motion.div>
   )

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
+import { isAxiosError } from "axios";
 
 const VerifyEmailPage: React.FC = (): React.JSX.Element => {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
@@ -43,7 +44,6 @@ const VerifyEmailPage: React.FC = (): React.JSX.Element => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const verificationCode = code.join("");
-    console.log(verificationCode);
     
     try {
       await verifyEmail(verificationCode);
@@ -51,7 +51,9 @@ const VerifyEmailPage: React.FC = (): React.JSX.Element => {
       Navigate("/");
       toast.success("Email verified successfully!");
     } catch (error: unknown) {
-      console.log(error?.response?.data?.error);
+      if(isAxiosError(error)) {
+        console.log(error?.response?.data?.error);
+      }
     }
   };
 

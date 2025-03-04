@@ -1,12 +1,12 @@
 import React from 'react'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 import { formatDate } from '../util/Date'
 import { useAuthStore } from '../store/authStore'
 import toast from 'react-hot-toast'
 import { Navigate } from 'react-router-dom'
 const DashboardPage: React.FC = (): React.JSX.Element => {
   const { user, signout } = useAuthStore();
-  
+
   const handleLogout = async() => {
     await signout();
     toast.success('Logged out successfully');
@@ -32,8 +32,8 @@ const DashboardPage: React.FC = (): React.JSX.Element => {
 					transition={{ delay: 0.2 }}
 				>
 					<h3 className='text-xl font-semibold text-green-400 mb-3'>Profile Information</h3>
-					<p className='text-gray-300'>Name: {user?.user?.name}</p>
-					<p className='text-gray-300'>Email: {user?.user?.email}</p>
+					<p className='text-gray-300'>Name: {user?.name}</p>
+					<p className='text-gray-300'>Email: {user?.email}</p>
 				</motion.div>
 				<motion.div
 					className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
@@ -44,7 +44,7 @@ const DashboardPage: React.FC = (): React.JSX.Element => {
 					<h3 className='text-xl font-semibold text-green-400 mb-3'>Account Activity</h3>
 					<p className='text-gray-300'>
 						<span className='font-bold'>Joined: </span>
-						{new Date(user?.user?.createdAt).toLocaleDateString("en-US", {
+						{new Date(user?.createdAt ?? '').toLocaleDateString("en-US", {
 							year: "numeric",
 							month: "long",
 							day: "numeric",
@@ -53,7 +53,7 @@ const DashboardPage: React.FC = (): React.JSX.Element => {
 					<p className='text-gray-300'>
 						<span className='font-bold'>Last Login: </span>
 
-						{formatDate(user?.user?.lastLogin)}
+						{formatDate(user?.lastLogin)}
 					</p>
 				</motion.div>
 			</div>

@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 const RedirectAuthenticated = ({ children }: { children: React.ReactNode }) => {
     const { isAuthenticated, user } = useAuthStore();
-    if(user?.user?.isVerified && isAuthenticated){
+    if(user?.isVerified && isAuthenticated){
         return <Navigate to='/' replace/>
     };
     return children;

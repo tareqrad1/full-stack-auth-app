@@ -1,5 +1,5 @@
-export const formatDate = (dateString: string) => {
-	const date = new Date(dateString);
+export const formatDate = (dateString: Date | string | number | undefined) => {
+	const date = dateString ? new Date(dateString) : new Date();
 	if (isNaN(date.getTime())) {
 		return "Invalid Date";
 	}
